@@ -1,0 +1,237 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const values = [
+  {
+    title: "Quality First",
+    description: "Every line of code in our projects is vetted for quality, readability, and best practices.",
+    icon: "🏆"
+  },
+  {
+    title: "Education Focused",
+    description: "Our projects aren't just for show. They are built to help you learn, dissect, and understand complex systems.",
+    icon: "🎓"
+  },
+  {
+    title: "Innovation Driven",
+    description: "We constantly update our catalog with the latest technologies like AI, ML, and Modern Web Stacks.",
+    icon: "💡"
+  }
+];
+---
+
+<BaseLayout title="About Us | ProjectDesk" activePage="about">
+  <div class="about-page">
+    <!-- Page Header -->
+    <section class="page-header">
+      <div class="container">
+        <h1>About ProjectDesk</h1>
+        <p class="lead">Empowering developers, students, and creators with premium source code resources.</p>
+      </div>
+    </section>
+
+    <!-- Main Content -->
+    <section class="content-section">
+      <div class="container">
+        <div class="story-grid">
+          <div class="text-content">
+            <h2>Our Mission</h2>
+            <p>
+              At ProjectDesk, we believe that the best way to learn software development is by <strong>doing</strong> and <strong>exploring</strong> professional-grade codebases.
+            </p>
+            <p>
+              We started with a simple goal: to bridge the gap between theoretical knowledge and practical application. 
+              Too often, students and junior developers struggle to find complete, working examples of complex applications. 
+              ProjectDesk solves this by providing a curated library of projects ranging from web applications to advanced AI systems.
+            </p>
+            <p>
+              Whether you need a foundation for your final year project, a kickstart for your startup idea, or simply want to study clean architecture, we have something for you.
+            </p>
+          </div>
+          <div class="image-content">
+            <div class="code-block-visual">
+              <pre><code><span class="keyword">class</span> <span class="class-name">Mission</span> &#123;
+  <span class="function">constructor</span>() &#123;
+    <span class="keyword">this</span>.goal = <span class="string">"Empower Developers"</span>;
+    <span class="keyword">this</span>.method = <span class="string">"High Quality Code"</span>;
+  &#125;
+
+  <span class="function">execute</span>() &#123;
+    <span class="keyword">return</span> <span class="string">"Success"</span>;
+  &#125;
+&#125;</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Values Section -->
+    <section class="values-section">
+      <div class="container">
+        <div class="section-title">
+          <h2>Our Core Values</h2>
+        </div>
+        <div class="values-grid">
+          {values.map(value => (
+            <div class="value-card">
+              <div class="icon">{value.icon}</div>
+              <h3>{value.title}</h3>
+              <p>{value.description}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .about-page {
+    background-color: #fff;
+  }
+
+  /* Header */
+  .page-header {
+    background: var(--bg-light);
+    padding: 80px 0 60px;
+    text-align: center;
+    border-bottom: 1px solid #eee;
+  }
+
+  .page-header h1 {
+    font-size: 3rem;
+    font-weight: 800;
+    color: var(--text-main);
+    margin-bottom: 16px;
+    letter-spacing: -0.02em;
+  }
+
+  .lead {
+    font-size: 1.25rem;
+    color: var(--text-light);
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  /* Content Section */
+  .content-section {
+    padding: 80px 0;
+  }
+
+  .story-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+  }
+
+  .text-content h2 {
+    font-size: 2rem;
+    margin-bottom: 24px;
+    color: var(--text-main);
+  }
+
+  .text-content p {
+    font-size: 1.1rem;
+    color: #4b5563;
+    margin-bottom: 24px;
+    line-height: 1.8;
+  }
+
+  /* Code Visual for "Code Theme" feel */
+  .code-block-visual {
+    background: #1e293b;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Fake MacOS window dots */
+  .code-block-visual::before {
+    content: '';
+    position: absolute;
+    top: 15px;
+    left: 20px;
+    width: 12px;
+    height: 12px;
+    background: #ff5f56;
+    border-radius: 50%;
+    box-shadow: 20px 0 0 #ffbd2e, 40px 0 0 #27c93f;
+  }
+
+  pre {
+    margin-top: 20px;
+    font-family: 'Fira Code', 'Roboto Mono', monospace;
+    font-size: 1rem;
+    color: #e2e8f0;
+  }
+
+  .keyword { color: #c678dd; }
+  .class-name { color: #e5c07b; }
+  .string { color: #98c379; }
+  .function { color: #61afef; }
+
+  /* Values Section */
+  .values-section {
+    background: #f8fafc;
+    padding: 80px 0;
+  }
+
+  .section-title {
+    text-align: center;
+    margin-bottom: 60px;
+  }
+
+  .section-title h2 {
+    font-size: 2.2rem;
+    font-weight: 700;
+  }
+
+  .values-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+  }
+
+  .value-card {
+    background: #fff;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    text-align: center;
+    transition: transform 0.3s ease;
+  }
+
+  .value-card:hover {
+    transform: translateY(-5px);
+  }
+
+  .icon {
+    font-size: 3rem;
+    margin-bottom: 20px;
+  }
+
+  .value-card h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: var(--text-main);
+  }
+
+  .value-card p {
+    color: var(--text-light);
+    line-height: 1.6;
+  }
+
+  @media (max-width: 900px) {
+    .story-grid {
+      grid-template-columns: 1fr;
+    }
+    .values-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

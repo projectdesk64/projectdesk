@@ -1,9 +1,9 @@
 ---
+const { transparent = false } = Astro.props;
 ---
-<header class="top-header">
+<header class={`top-header ${transparent ? 'transparent' : ''}`}>
   <div class="container h-full">
     <div class="header-row">
-      <!-- Logo -->
       <!-- Logo -->
       <div class="logo">
         <a href="/">
@@ -11,15 +11,11 @@
         </a>
       </div>
 
-
-
       <!-- User Actions -->
       <div class="user-actions">
-
           <nav class="top-nav-links">
           <a href="/projects">PROJECTS</a>
-          <a href="/about">ABOUT US</a>
-          <a href="/contact">CONTACT US</a>
+          <a href="/about">ABOUT</a>
         </nav>
       </div>
     </div>
@@ -29,9 +25,22 @@
 <style>
   .top-header {
     background: #fff;
-    padding: 20px 0;
+    padding: 15px 0; /* Reduced padding for tighter look */
     border-bottom: 1px solid #eee;
+    transition: all 0.3s ease;
   }
+
+  /* Transparent overlay mode */
+  .top-header.transparent {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 50;
+    background: transparent;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05); /* Very subtle border or none */
+  }
+
   .header-row {
     display: flex;
     align-items: center;
@@ -47,9 +56,6 @@
     width: auto;
   }
 
-
-
-
   /* User Actions */
   .user-actions {
     display: flex;
@@ -59,7 +65,7 @@
 
   .top-nav-links {
     display: flex;
-    gap: 40px; /* Increased spacing */
+    gap: 40px; 
     height: 100%;
     align-items: center;
   }

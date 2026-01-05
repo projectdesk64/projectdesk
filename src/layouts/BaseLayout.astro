@@ -7,7 +7,8 @@ const {
   title = "ProjectDesk", 
   activePage,
   description = "High-quality software projects and source code for students and professionals.",
-  image = "/logo.png"
+  image = "/logo.png",
+  transparentHeader = false
 } = Astro.props;
 
 const siteURL = Astro.site || Astro.url.origin;
@@ -87,14 +88,10 @@ const imageURL = image.startsWith('http') ? image : new URL(image, siteURL).toSt
       .markdown :global(li) {
         margin-bottom: 8px;
       }
-
-      .markdown :global(li) {
-        margin-bottom: 8px;
-      }
     </style>
   </head>
   <body>
-    <TopHeader />
+    <TopHeader transparent={transparentHeader} />
 
     <main>
       <slot />
