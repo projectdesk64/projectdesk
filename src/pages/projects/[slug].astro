@@ -31,8 +31,17 @@ const emailLink = `mailto:${CONTACT.email}?subject=Project Inquiry&body=${messag
 <BaseLayout title={project.data.title}>
   <article class="project">
     <header>
+      <div class="badges">
+        <span class="category-badge">{project.data.category}</span>
+      </div>
       <h1>{project.data.title}</h1>
       <p class="price">₹{project.data.price}</p>
+      
+      <div class="tech-stack">
+        {project.data.techStack.map((tech) => (
+          <span class="tech-badge">{tech}</span>
+        ))}
+      </div>
     </header>
 
     <img
@@ -61,7 +70,7 @@ const emailLink = `mailto:${CONTACT.email}?subject=Project Inquiry&body=${messag
         {whatsappLink && (
           <a href={whatsappLink} target="_blank" class="btn whatsapp">
             <img src="/icons/whatsapp.png" alt="WhatsApp" width="24" height="24" />
-            Chat on WhatsApp
+            WhatsApp
           </a>
         )}
 
@@ -89,6 +98,37 @@ const emailLink = `mailto:${CONTACT.email}?subject=Project Inquiry&body=${messag
 
   header {
     margin-bottom: 24px;
+  }
+
+  .badges {
+    margin-bottom: 12px;
+  }
+
+  .category-badge {
+    background: #e0f2fe;
+    color: #0369a1;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .tech-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 16px;
+  }
+
+  .tech-badge {
+    background: #f3f4f6;
+    color: #374151;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    border: 1px solid #e5e5e5;
   }
 
   .price {
@@ -141,7 +181,9 @@ const emailLink = `mailto:${CONTACT.email}?subject=Project Inquiry&body=${messag
   .btn {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 12px;
+    min-width: 160px;
     padding: 12px 24px;
     border-radius: 12px;
     text-decoration: none;
