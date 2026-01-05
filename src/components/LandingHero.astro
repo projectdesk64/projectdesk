@@ -1,0 +1,318 @@
+---
+const { projects = [] } = Astro.props;
+
+// Take top 5 projects for the slider, or fewer if not enough
+const slides = projects.slice(0, 5);
+---
+
+<div class="hero-wrapper">
+  <div class="container">
+    <div class="hero-slider" id="heroSlider">
+      {slides.map((project, index) => (
+        <div class={`slide ${index === 0 ? 'active' : ''}`} data-index={index}>
+          <div class="hero-content">
+            <div class="content-text">
+              <span class="category-badge">{project.data.category}</span>
+              <h1>{project.data.title}</h1>
+              <p class="subtitle">{project.data.description}</p>
+              <a href={`/projects/${project.slug}`} class="cta-btn">View Project</a>
+            </div>
+            <div class="content-visual">
+               <img src={project.data.coverImage || "/images/placeholder-project.png"} alt={project.data.title} class="hero-img" />
+            </div>
+          </div>
+        </div>
+      ))}
+      
+      {slides.length > 1 && (
+        <div class="slider-dots">
+          {slides.map((_, index) => (
+            <span class={`dot ${index === 0 ? 'active' : ''}`} data-index={index}></span>
+          ))}
+        </div>
+      )}
+
+      {slides.length === 0 && (
+        <div class="hero-content">
+            <div class="content-text">
+                <h1>Welcome to ProjectDesk</h1>
+                <p class="subtitle">Discover amazing projects and source codes.</p>
+            </div>
+        </div>
+      )}
+    </div>
+  </div>
+</div>
+
+<script>
+  function initHeroSlider() {
+    const slider = document.getElementById('heroSlider');
+    if (!slider) return;
+
+    if (slider.dataset.initialized === 'true') return;
+    slider.dataset.initialized = 'true';
+
+    const slides = slider.querySelectorAll('.slide');
+    const dots = slider.querySelectorAll('.dot');
+    
+    let currentIndex = 0;
+    let autoRotateInterval;
+
+    function showSlide(index) {
+        if (index < 0) index = slides.length - 1;
+        if (index >= slides.length) index = 0;
+        
+        currentIndex = index;
+
+        slides.forEach(slide => slide.classList.remove('active'));
+        dots.forEach(dot => dot.classList.remove('active'));
+
+        slides[currentIndex].classList.add('active');
+        if(dots[currentIndex]) dots[currentIndex].classList.add('active');
+    }
+
+    function nextSlide() {
+        showSlide(currentIndex + 1);
+    }
+
+    // Initialize events if we have multiple slides
+    if (slides.length > 1) {
+        dots.forEach(dot => {
+             dot.addEventListener('click', () => {
+                const index = parseInt(dot.getAttribute('data-index'));
+                showSlide(index);
+                resetInterval();
+            });
+        });
+
+        function startInterval() {
+            clearInterval(autoRotateInterval);
+            autoRotateInterval = setInterval(nextSlide, 5000);
+        }
+        
+        function resetInterval() {
+            startInterval();
+        }
+        
+        startInterval();
+    }
+  }
+
+  initHeroSlider();
+  document.addEventListener('astro:page-load', initHeroSlider);
+</script>
+
+<style>
+  .hero-wrapper {
+    background: linear-gradient(to right, #ffffff, #fcfcfc);
+    border-bottom: 1px solid #f0f0f0;
+    overflow: hidden;
+    position: relative;
+    min-height: 650px; 
+  }
+  
+  .hero-slider {
+    position: relative;
+    height: 100%;
+    min-height: 650px;
+  }
+
+  .slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.6s ease, visibility 0.6s ease;
+    display: flex; 
+  }
+
+  .slide.active {
+    opacity: 1;
+    visibility: visible;
+    z-index: 2;
+  }
+
+  /* Animations for Active Slide Elements */
+  /* Text Slide Up One by One */
+  .slide .content-text > * {
+    opacity: 0;
+    transform: translateY(60px); /* Increased distance for dramatic effect */
+    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  
+  .slide.active .content-text > * {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  /* Pronounced Stagger */
+  .slide.active .content-text .category-badge { transition-delay: 0.1s; }
+  .slide.active .content-text h1 { transition-delay: 0.25s; }
+  .slide.active .content-text .subtitle { transition-delay: 0.4s; }
+  .slide.active .content-text .cta-btn { transition-delay: 0.55s; }
+
+  /* Image Animation */
+  .slide .hero-img {
+    opacity: 0;
+    transform: translateX(60px) scale(0.95);
+    transition: all 1s cubic-bezier(0.19, 1, 0.22, 1);
+  }
+  
+  .slide.active .hero-img {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+    transition-delay: 0.2s; /* Image comes in slightly after text starts */
+  }
+
+
+  /* Layout */
+  .hero-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+    padding: 80px 0; /* Reset side padding */
+    gap: 60px; 
+  }
+
+  .content-text {
+    flex: 1;
+    max-width: 50%;
+    z-index: 10;
+  }
+  
+  .category-badge {
+    display: inline-block;
+    background: #f0f4ff; /* Slightly softer */
+    color: var(--primary, #2563eb);
+    padding: 8px 16px;
+    border-radius: 30px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-bottom: 24px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    font-size: 4rem; 
+    line-height: 1.1;
+    color: #111;
+    margin: 0 0 24px 0;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+  
+  .subtitle {
+    font-size: 1.25rem;
+    line-height: 1.6;
+    color: #555;
+    margin-bottom: 40px;
+    max-width: 90%;
+    font-weight: 400;
+  }
+
+  .cta-btn {
+    display: inline-block;
+    padding: 18px 42px;
+    background: #111;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  }
+  .cta-btn:hover {
+    background: #333;
+    transform: translateY(-3px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+  }
+
+  .content-visual {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    height: 100%;
+    position: relative;
+  }
+  
+  .hero-img {
+    max-width: 100%;
+    max-height: 500px;
+    object-fit: contain;
+    filter: drop-shadow(0 25px 50px rgba(0,0,0,0.12)); 
+  }
+
+  .slider-dots {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 12px;
+    z-index: 20;
+  }
+  .dot {
+    width: 12px;
+    height: 12px;
+    background: #e2e2e2;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+  .dot.active {
+    background: #111;
+    transform: scale(1.2);
+    width: 30px; 
+    border-radius: 12px;
+  }
+  
+  @media (max-width: 1200px) {
+     .hero-content {
+       padding: 80px 0;
+     }
+     h1 { font-size: 3rem; }
+  }
+
+  @media (max-width: 768px) {
+    .hero-wrapper { min-height: auto; }
+    .hero-slider { min-height: auto; }
+    
+    .hero-content {
+      flex-direction: column-reverse;
+      padding: 60px 0 100px 0;
+      gap: 40px;
+      text-align: center;
+    }
+    
+    .slider-dots {
+       bottom: 40px;
+    }
+
+    .content-text {
+      max-width: 100%;
+    }
+    .subtitle {
+      max-width: 100%;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    h1 {
+      font-size: 2.5rem;
+    }
+    .content-visual {
+      justify-content: center;
+      width: 100%;
+    }
+    .hero-img {
+       max-height: 300px;
+    }
+  }
+</style>

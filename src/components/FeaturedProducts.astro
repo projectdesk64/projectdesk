@@ -1,0 +1,159 @@
+---
+import ProductCard from './ProductCard.astro';
+
+// Expecting projects prop
+const { projects = [] } = Astro.props;
+
+// Get unique categories from projects
+const categories = ['All', ...new Set(projects.map(p => p.data.category))];
+---
+<section class="featured-section">
+  <div class="container">
+    <div class="section-header">
+      <h2>FEATURED PRODUCTS</h2>
+      <p>Visit our shop to see amazing creations from our Projects.</p>
+      
+      <div class="tabs">
+        {categories.map((cat, index) => (
+          <button 
+            class={`tab-btn ${index === 0 ? 'active' : ''}`}
+            data-category={cat}
+          >
+            {cat}
+          </button>
+        ))}
+      </div>
+    </div>
+
+    <div class="product-grid" id="featured-grid">
+      {projects.map(p => (
+        <div class="project-item" data-category={p.data.category}>
+          <ProductCard 
+            title={p.data.title}
+            image={p.data.coverImage}
+            category={p.data.category}
+            href={`/projects/${p.slug}`}
+          />
+        </div>
+      ))}
+      
+      {projects.length === 0 && (
+         <div class="no-projects">No projects found.</div>
+      )}
+    </div>
+  </div>
+</section>
+
+<script>
+  // Simple filtering logic
+  const tabs = document.querySelectorAll('.tab-btn');
+  const items = document.querySelectorAll('.project-item');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      // Remove active class from all tabs
+      tabs.forEach(t => t.classList.remove('active'));
+      // Add active class to clicked tab
+      tab.classList.add('active');
+
+      const category = tab.getAttribute('data-category');
+
+      items.forEach(item => {
+        const itemCategory = item.getAttribute('data-category');
+        if (category === 'All' || itemCategory === category) {
+          item.style.display = 'block';
+          // Add a small animation or fade in could go here
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    });
+  });
+</script>
+
+<style>
+  .featured-section {
+    padding: 60px 0;
+    background: #fff;
+  }
+  .section-header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  h2 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin: 0 0 10px;
+    color: #333;
+    text-transform: uppercase;
+  }
+  p {
+    color: #666;
+    margin-bottom: 30px;
+  }
+
+  .tabs {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 30px;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 15px;
+  }
+  .tab-btn {
+    border: none;
+    background: none;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #999;
+    cursor: pointer;
+    text-transform: uppercase;
+    padding: 5px 0;
+    position: relative;
+    transition: color 0.3s;
+  }
+  .tab-btn:hover {
+    color: #666;
+  }
+  .tab-btn.active {
+    color: #333;
+  }
+  .tab-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: -17px; /* Adjust to align with border-bottom of container */
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--primary);
+  }
+
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+  }
+  
+  /* Reset display for items since we toggle it in JS */
+  .project-item {
+    display: block;
+  }
+  
+  .no-projects {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: #999;
+    padding: 20px;
+  }
+
+  @media (max-width: 992px) {
+    .product-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (max-width: 576px) {
+    .product-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

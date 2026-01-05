@@ -1,0 +1,216 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ProductCard from "../../components/ProductCard.astro";
+import { getCollection } from "astro:content";
+
+const projects = (await getCollection("projects")).filter(
+  (p) => !p.data.draft
+);
+
+// Get unique categories
+const categories = ["All", ...new Set(projects.map((p) => p.data.category))];
+---
+
+<BaseLayout title="All Projects | ProjectDesk">
+  <div class="projects-page">
+    <div class="page-header">
+      <div class="container">
+        <h1>Project Catalog</h1>
+        <p class="subtitle">
+          Explore our complete collection of high-quality software projects.
+        </p>
+      </div>
+    </div>
+
+    <div class="container content-wrapper">
+      <!-- Filter Tabs -->
+      <div class="filter-tabs">
+        {
+          categories.map((cat, index) => (
+            <button
+              class={`filter-btn ${index === 0 ? "active" : ""}`}
+              data-category={cat}
+            >
+              {cat}
+            </button>
+          ))
+        }
+      </div>
+
+      <!-- Projects Grid -->
+      <div class="projects-grid">
+        {
+          projects.map((p) => (
+            <div class="project-card-wrapper" data-category={p.data.category}>
+              <ProductCard
+                title={p.data.title}
+                image={p.data.coverImage}
+                category={p.data.category}
+                href={`/projects/${p.slug}`}
+              />
+            </div>
+          ))
+        }
+      </div>
+      
+      {projects.length === 0 && (
+        <div class="empty-state">
+           <h3>No projects found</h3>
+           <p>Check back later for new additions!</p>
+        </div>
+      )}
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  // Filter functionality
+  const buttons = document.querySelectorAll('.filter-btn');
+  const items = document.querySelectorAll('.project-card-wrapper');
+
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      // Update active state
+      buttons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const category = btn.getAttribute('data-category');
+
+      // Filter items with animation
+      items.forEach(item => {
+        const itemCategory = item.getAttribute('data-category');
+        
+        if (category === 'All' || itemCategory === category) {
+          item.classList.remove('hidden');
+          // Trigger reflow to restart animation/transition if needed
+          void item.offsetWidth; 
+          item.classList.add('visible');
+        } else {
+          item.classList.remove('visible');
+          setTimeout(() => {
+             if(!item.classList.contains('visible')) item.classList.add('hidden');
+          }, 300); // Wait for fade out
+        }
+      });
+    });
+  });
+
+  // Initial fade in
+  items.forEach((item, index) => {
+    setTimeout(() => {
+      item.classList.add('visible');
+    }, index * 50); // Staggered reveal
+  });
+</script>
+
+<style>
+  .projects-page {
+    background-color: #fcfcfc;
+    min-height: 100vh;
+    padding-bottom: 80px;
+  }
+
+  .page-header {
+    background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%);
+    padding: 60px 0 40px;
+    margin-bottom: 40px;
+    text-align: center;
+    border-bottom: 1px solid #eef2f6;
+  }
+
+  h1 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 16px;
+    color: #111827;
+    letter-spacing: -0.02em;
+  }
+
+  .subtitle {
+    font-size: 1.1rem;
+    color: #6b7280;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .content-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  /* Filter Tabs */
+  .filter-tabs {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 48px;
+  }
+
+  .filter-btn {
+    appearance: none;
+    background: transparent;
+    border: 1px solid #e5e7eb;
+    border-radius: 30px;
+    padding: 8px 24px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #4b5563;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .filter-btn:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: #f0fdf4;
+  }
+
+  .filter-btn.active {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: white;
+    box-shadow: 0 4px 12px rgba(139, 195, 74, 0.3);
+  }
+
+  /* Grid */
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 32px;
+  }
+
+  .project-card-wrapper {
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    opacity: 0;
+    transform: translateY(20px);
+    display: block; /* Default display */
+  }
+
+  .project-card-wrapper.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  .project-card-wrapper.hidden {
+    display: none;
+  }
+  
+  .empty-state {
+    text-align: center;
+    padding: 60px 0;
+    color: #6b7280;
+  }
+
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 2rem;
+    }
+    
+    .projects-grid {
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 24px;
+    }
+  }
+</style>

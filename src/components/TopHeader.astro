@@ -1,0 +1,98 @@
+---
+---
+<header class="top-header">
+  <div class="container h-full">
+    <div class="header-row">
+      <!-- Logo -->
+      <!-- Logo -->
+      <div class="logo">
+        <a href="/">
+          <img src="/logo.png" alt="ProjectDesk" class="logo-img" />
+        </a>
+      </div>
+
+
+
+      <!-- User Actions -->
+      <div class="user-actions">
+
+          <nav class="top-nav-links">
+          <a href="/projects">PROJECTS</a>
+          <a href="/about">ABOUT US</a>
+          <a href="/contact">CONTACT US</a>
+        </nav>
+      </div>
+    </div>
+  </div>
+</header>
+
+<style>
+  .top-header {
+    background: #fff;
+    padding: 20px 0;
+    border-bottom: 1px solid #eee;
+  }
+  .header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+  }
+  .logo a {
+    display: block;
+    text-decoration: none;
+  }
+  .logo-img {
+    height: 36px;
+    width: auto;
+  }
+
+
+
+
+  /* User Actions */
+  .user-actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .top-nav-links {
+    display: flex;
+    gap: 40px; /* Increased spacing */
+    height: 100%;
+    align-items: center;
+  }
+  
+  .top-nav-links a {
+    position: relative;
+    font-size: 14px;
+    font-weight: 600;
+    color: #444;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: color 0.3s ease;
+    padding: 5px 0;
+  }
+
+  /* Animated underline effect */
+  .top-nav-links a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: var(--primary);
+    transition: width 0.3s ease;
+  }
+
+  .top-nav-links a:hover {
+    color: var(--primary);
+  }
+
+  .top-nav-links a:hover::after {
+    width: 100%;
+  }
+</style>

@@ -1,0 +1,96 @@
+---
+const { 
+  title, 
+  image, 
+  category, 
+  href 
+} = Astro.props;
+---
+<div class="product-card">
+  <a href={href} class="card-link">
+    <div class="img-wrapper">
+      <img src={image || "/images/placeholder-project.png"} alt={title} />
+    </div>
+    <div class="info-wrapper">
+      <h3 class="product-title">{title}</h3>
+      <span class="product-category">{category}</span>
+    </div>
+  </a>
+</div>
+
+<style>
+  .product-card {
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: 1px solid #f0f0f0;
+    height: 100%;
+    position: relative;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+  }
+  
+  .card-link {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .product-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+    border-color: transparent;
+  }
+
+  .img-wrapper {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+    background: #f8f9fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .info-wrapper {
+    padding: 24px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: white;
+    z-index: 1;
+  }
+
+  .product-category {
+    display: inline-block;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 700;
+    color: var(--primary, #2563eb);
+    margin-bottom: 4px;
+    opacity: 0.8;
+  }
+
+  .product-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    line-height: 1.3;
+    color: #1a1a1a;
+    margin: 0;
+    /* Limit to 2 lines for consistency */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>

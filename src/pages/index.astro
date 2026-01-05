@@ -1,102 +1,33 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import ProjectCard from "../components/ProjectCard.astro";
+import LandingHero from "../components/LandingHero.astro";
+
+import FeaturedProducts from "../components/FeaturedProducts.astro";
+import WhyChooseUs from "../components/WhyChooseUs.astro";
 import { getCollection } from "astro:content";
 
 const projects = (await getCollection("projects")).filter(
   (p) => !p.data.draft
 );
 
+// Get unique categories for the sidebar
 const categories = [
   ...new Set(projects.map(p => p.data.category))
 ];
 ---
 
-<BaseLayout title="ProjectDesk">
-  <div class="container">
-    <header class="hero">
-      <img src="/logo.png" alt="ProjectDesk" class="logo" />
-      <p class="tagline">Private catalog of ready-made software projects.</p>
-    </header>
+<BaseLayout title="ProjectDesk - Global Techno Solutions" activePage="home">
+  <div class="landing-page">
+    <LandingHero projects={projects} />
 
-    <div class="filters">
-      <select id="categoryFilter">
-        <option value="">All Categories</option>
-        {categories.map(category => (
-          <option value={category}>{category}</option>
-        ))}
-      </select>
-    </div>
-
-    <section class="grid">
-      {projects.map((project) => (
-        <ProjectCard
-          title={project.data.title}
-          shortDescription={project.data.shortDescription}
-          coverImage={project.data.coverImage}
-          href={`/projects/${project.slug}`}
-          category={project.data.category}
-        />
-      ))}
-    </section>
+    <FeaturedProducts projects={projects} />
+    <WhyChooseUs />
   </div>
 </BaseLayout>
 
 <style>
-  .hero {
-    text-align: center;
-    padding: 32px 0 24px;
-  }
-
-  .logo {
-    height: 64px;
-    width: auto;
-    margin-bottom: 12px;
-  }
-
-  .tagline {
-    font-size: 1.1rem;
-    color: #666;
-    margin: 0 auto 40px;
-    max-width: 600px;
-  }
-
-  .filters {
-    display: flex;
-    justify-content: flex-end;
-    gap: 16px;
-    margin-bottom: 24px;
-  }
-
-  select {
-    padding: 8px 12px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-  }
-
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 24px;
-    margin-top: 32px;
-    border: 1px solid #e5e5e5;
-    border-radius: 16px;
-    padding: 24px;
-    background-color: #fcfcfc;
+  /* Page specific overrides if needed */
+  .landing-page {
+    background-color: #f8f9fa;
   }
 </style>
-
-<script>
-  const categoryFilter = document.getElementById("categoryFilter");
-  const cards = document.querySelectorAll(".card-link");
-
-  categoryFilter.addEventListener("change", () => {
-    const category = categoryFilter.value;
-
-    cards.forEach(card => {
-      const cardCategory = card.dataset.category;
-      const match = !category || cardCategory === category;
-      card.style.display = match ? "" : "none";
-    });
-  });
-</script>

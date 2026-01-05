@@ -1,0 +1,92 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ProductCard from "../../components/ProductCard.astro";
+
+export async function getStaticPaths() {
+  const allProjects = await getCollection("projects");
+  const uniqueCategories = [
+    ...new Set(allProjects.map((project) => project.data.category)),
+  ];
+
+  return uniqueCategories.map((category) => {
+    const filteredProjects = allProjects.filter(
+      (project) => project.data.category === category
+    );
+    return {
+      params: { category: category.toLowerCase() },
+      props: { category, projects: filteredProjects },
+    };
+  });
+}
+
+const { category, projects } = Astro.props;
+---
+
+<BaseLayout title={`${category} Projects | ProjectDesk`}>
+  <div class="category-page">
+    <div class="container">
+      <div class="page-header">
+        <h1>{category} Projects</h1>
+        <p>Explore our wide range of {category} projects</p>
+      </div>
+
+      <div class="product-grid">
+        {
+          projects.map((p) => (
+            <ProductCard
+              title={p.data.title}
+              image={p.data.coverImage}
+              category={p.data.category}
+              href={`/projects/${p.slug}`}
+              price={`₹${p.data.price}`}
+            />
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .category-page {
+    padding: 60px 0;
+    background-color: #f8f9fa;
+    min-height: 80vh;
+  }
+  
+  .page-header {
+    text-align: center;
+    margin-bottom: 50px;
+  }
+  
+  .page-header h1 {
+    font-size: 2.5rem;
+    color: #333;
+    margin-bottom: 10px;
+    font-weight: 700;
+  }
+  
+  .page-header p {
+    color: #666;
+    font-size: 1.1rem;
+  }
+
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+  }
+
+  @media (max-width: 992px) {
+    .product-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 576px) {
+    .product-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
