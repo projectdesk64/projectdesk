@@ -1,8 +1,23 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+
+const projects = (await getCollection("projects")).filter(
+  (p) => !p.data.draft
+);
 ---
 
 <BaseLayout title="ProjectDesk">
   <h1>ProjectDesk</h1>
-  <p>Private catalog of ready-made software projects.</p>
+  <p>Browse available software projects</p>
+
+  <ul>
+    {projects.map((project) => (
+      <li>
+        <strong>{project.data.title}</strong><br />
+        ₹{project.data.price}<br />
+        {project.data.shortDescription}
+      </li>
+    ))}
+  </ul>
 </BaseLayout>
