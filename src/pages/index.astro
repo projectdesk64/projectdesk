@@ -6,12 +6,25 @@ import { getCollection } from "astro:content";
 const projects = (await getCollection("projects")).filter(
   (p) => !p.data.draft
 );
+
+const categories = [
+  ...new Set(projects.map(p => p.data.category))
+];
 ---
 
 <BaseLayout title="ProjectDesk">
   <div class="container">
     <h1>ProjectDesk</h1>
     <p>Browse available software projects</p>
+
+    <div class="filters">
+      <select id="categoryFilter">
+        <option value="">All Categories</option>
+        {categories.map(category => (
+          <option value={category}>{category}</option>
+        ))}
+      </select>
+    </div>
 
     <section class="grid">
       {projects.map((project) => (
@@ -21,6 +34,7 @@ const projects = (await getCollection("projects")).filter(
           shortDescription={project.data.shortDescription}
           coverImage={project.data.coverImage}
           href={`/projects/${project.slug}`}
+          category={project.data.category}
         />
       ))}
     </section>
@@ -37,6 +51,18 @@ const projects = (await getCollection("projects")).filter(
     margin-bottom: 32px;
   }
 
+  .filters {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  select {
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+  }
+
   .grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -48,3 +74,18 @@ const projects = (await getCollection("projects")).filter(
     background-color: #fcfcfc;
   }
 </style>
+
+<script>
+  const categoryFilter = document.getElementById("categoryFilter");
+  const cards = document.querySelectorAll(".card-link");
+
+  categoryFilter.addEventListener("change", () => {
+    const category = categoryFilter.value;
+
+    cards.forEach(card => {
+      const cardCategory = card.dataset.category;
+      const match = !category || cardCategory === category;
+      card.style.display = match ? "" : "none";
+    });
+  });
+</script>

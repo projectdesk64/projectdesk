@@ -1,8 +1,19 @@
 ---
-const { title, price, shortDescription, coverImage, href } = Astro.props;
+const {
+  title,
+  price,
+  shortDescription,
+  coverImage,
+  href,
+  category
+} = Astro.props;
 ---
 
-<a href={href} class="card-link">
+<a
+  href={href}
+  class="card-link"
+  data-category={category}
+>
   <article class="card">
     <img src={coverImage} alt={title} class="card-image" />
 
