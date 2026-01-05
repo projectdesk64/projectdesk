@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { getCollection } from "astro:content";
+import { CONTACT } from "../../config/contact";
 
 export async function getStaticPaths() {
   const projects = await getCollection("projects");
@@ -15,6 +16,16 @@ export async function getStaticPaths() {
 
 const { project } = Astro.props;
 const { Content } = await project.render();
+
+const message = encodeURIComponent(
+  `Hi, I'm interested in the "${project.data.title}" project`
+);
+
+const whatsappLink = CONTACT.whatsappNumber
+  ? `https://wa.me/${CONTACT.whatsappNumber}?text=${message}`
+  : null;
+
+const emailLink = `mailto:${CONTACT.email}?subject=Project Inquiry&body=${message}`;
 ---
 
 <BaseLayout title={project.data.title}>
@@ -40,6 +51,32 @@ const { Content } = await project.render();
         src={project.data.architectureImage}
         alt="Architecture diagram"
       />
+    </section>
+
+    <section class="cta">
+      <h2>Interested in this project?</h2>
+      <p>Contact me to get the source code, documentation, and customization.</p>
+
+      <div class="cta-buttons">
+        {whatsappLink && (
+          <a href={whatsappLink} target="_blank" class="btn whatsapp">
+            <img src="/icons/whatsapp.png" alt="WhatsApp" width="24" height="24" />
+            Chat on WhatsApp
+          </a>
+        )}
+
+        <a href={emailLink} class="btn email">
+          <img src="/icons/email.png" alt="Email" width="24" height="24" />
+          Email Me
+        </a>
+
+        {CONTACT.instagram && (
+          <a href={CONTACT.instagram} target="_blank" class="btn instagram">
+            <img src="/icons/instagram.png" alt="Instagram" width="24" height="24" />
+            Instagram
+          </a>
+        )}
+      </div>
     </section>
   </article>
 </BaseLayout>
@@ -74,5 +111,50 @@ const { Content } = await project.render();
     width: 100%;
     border-radius: 12px;
     margin-top: 16px;
+  }
+
+  .cta {
+    margin-top: 72px;
+    padding: 40px 32px;
+    border-radius: 20px;
+    background: linear-gradient(180deg, #f9f9f9, #f2f2f2);
+    text-align: center;
+  }
+
+  .cta h2 {
+    margin-bottom: 12px;
+    font-size: 1.5rem;
+  }
+
+  .cta p {
+    color: #555;
+    margin-bottom: 28px;
+  }
+
+  .cta-buttons {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 24px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+    border: 1px solid #e5e5e5;
+    background: #fff;
+    color: #111;
+  }
+
+  .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    background: #fcfcfc;
   }
 </style>
