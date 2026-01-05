@@ -1,0 +1,78 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+
+export async function getStaticPaths() {
+  const projects = await getCollection("projects");
+
+  return projects
+    .filter((p) => !p.data.draft)
+    .map((project) => ({
+      params: { slug: project.slug },
+      props: { project },
+    }));
+}
+
+const { project } = Astro.props;
+const { Content } = await project.render();
+---
+
+<BaseLayout title={project.data.title}>
+  <article class="project">
+    <header>
+      <h1>{project.data.title}</h1>
+      <p class="price">₹{project.data.price}</p>
+    </header>
+
+    <img
+      src={project.data.coverImage}
+      alt={project.data.title}
+      class="cover"
+    />
+
+    <div class="markdown">
+      <Content />
+    </div>
+
+    <section class="architecture">
+      <h2>Architecture</h2>
+      <img
+        src={project.data.architectureImage}
+        alt="Architecture diagram"
+      />
+    </section>
+  </article>
+</BaseLayout>
+
+<style>
+  .project {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  header {
+    margin-bottom: 24px;
+  }
+
+  .price {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-top: 8px;
+  }
+
+  .cover {
+    width: 100%;
+    border-radius: 16px;
+    margin: 32px 0;
+  }
+
+  .architecture {
+    margin-top: 48px;
+  }
+
+  .architecture img {
+    width: 100%;
+    border-radius: 12px;
+    margin-top: 16px;
+  }
+</style>

@@ -8,7 +8,7 @@ techStack:
 shortDescription: This is a sample AI-based project.
 coverImage: /images/sample/cover.png
 architectureImage: /images/sample/architecture.png
-draft: true
+draft: false
 ---
 
 ## Overview
