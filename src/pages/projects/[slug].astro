@@ -27,28 +27,36 @@ const whatsappLink = CONTACT.whatsappNumber
 
 const emailLink = `mailto:${CONTACT.email}?subject=Project Inquiry&body=${message}`;
 const instagramLink = CONTACT.instagram;
+
+// SEO metadata
+const projectDescription = project.data.shortDescription || `Explore ${project.data.title} - A high-quality ${project.data.category} project with complete source code, documentation, and setup guide.`;
+const projectImage = project.data.coverImage;
 ---
 
-<BaseLayout title={project.data.title}>
+<BaseLayout 
+  title={`${project.data.title} | ProjectDesk`}
+  description={projectDescription}
+  image={projectImage}
+>
   <div class="project-page-container">
     
     <!-- Header Section -->
     <header class="project-header">
       <div class="header-content">
-        <nav class="breadcrumb">
+        <nav class="breadcrumb fade-in-up" style="animation-delay: 0.1s">
           <a href="/projects">Projects</a>
           <span class="chevron">/</span>
           <span class="current">{project.data.title}</span>
         </nav>
         
         <div class="title-row">
-          <h1>{project.data.title}</h1>
-          <div class="price-tag">
+          <h1 class="fade-in-up" style="animation-delay: 0.2s">{project.data.title}</h1>
+          <div class="price-tag fade-in-up" style="animation-delay: 0.3s">
             <span class="currency">₹</span>{project.data.price}
           </div>
         </div>
 
-        <div class="meta-row">
+        <div class="meta-row fade-in-up" style="animation-delay: 0.4s">
           <div class="category-chip">{project.data.category}</div>
           <span class="divider">|</span>
           <span class="id-text">ID: {project.slug.toUpperCase()}</span>
@@ -61,7 +69,7 @@ const instagramLink = CONTACT.instagram;
       
       <!-- Left: Content & Visuals -->
       <div class="content-area">
-        <div class="hero-image-container">
+        <div class="hero-image-container fade-in-up" style="animation-delay: 0.5s">
           <img
             src={project.data.coverImage}
             alt={project.data.title}
@@ -70,13 +78,13 @@ const instagramLink = CONTACT.instagram;
           />
         </div>
 
-        <div class="prose-wrapper">
+        <div class="prose-wrapper fade-in-up" style="animation-delay: 0.6s">
           <div class="section-label">Overview</div>
           <Content />
         </div>
 
         {project.data.architectureImage && (
-          <div class="architecture-wrapper">
+          <div class="architecture-wrapper fade-in-up" style="animation-delay: 0.7s">
              <div class="section-label">System Architecture</div>
              <div class="img-frame">
                 <img
@@ -93,7 +101,7 @@ const instagramLink = CONTACT.instagram;
         <div class="sidebar-sticky">
           
           <!-- Actions -->
-          <div class="action-card">
+          <div class="action-card fade-in-up" style="animation-delay: 0.5s">
             <div class="action-header">
               <span class="label">Purchase & Support</span>
             </div>
@@ -118,11 +126,24 @@ const instagramLink = CONTACT.instagram;
                 </a>
               )}
             </div>
-            <p class="secure-text">Includes Source Code • Documentation • Setup</p>
+            <div class="includes-section">
+              <div class="includes-item">
+                <span class="includes-icon">📦</span>
+                <span class="includes-label">Source Code</span>
+              </div>
+              <div class="includes-item">
+                <span class="includes-icon">📚</span>
+                <span class="includes-label">Documentation</span>
+              </div>
+              <div class="includes-item">
+                <span class="includes-icon">⚙️</span>
+                <span class="includes-label">Setup Guide</span>
+              </div>
+            </div>
           </div>
 
           <!-- Tech Stack -->
-          <div class="spec-card">
+          <div class="spec-card fade-in-up" style="animation-delay: 0.6s">
             <div class="card-title">Technology Stack</div>
             <div class="tech-grid">
               {project.data.techStack.map((tech) => (
@@ -139,26 +160,37 @@ const instagramLink = CONTACT.instagram;
 </BaseLayout>
 
 <style>
-  /* Modern Color System */
+  /* Entry Animations */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .fade-in-up {
+    animation: fadeInUp 0.6s ease-out forwards;
+    opacity: 0;
+  }
+
+  /* Modern Color System - Using Global Variables */
   :root {
-    --page-bg: #fafbfc;
-    --card-bg: #ffffff;
-    --border-subtle: #e8eaed;
-    --border-hover: #d0d3d6;
-    --text-primary: #1a1d29;
-    --text-secondary: #6b7280;
-    --text-muted: #9ca3af;
-    --accent: #6366f1;
-    --accent-light: #eef2ff;
-    --accent-dark: #4f46e5;
-    --success: #10b981;
-    --success-light: #d1fae5;
-    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-    --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    --gradient-success: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    --page-bg: var(--bg-light, #fafbfc);
+    --card-bg: var(--white, #ffffff);
+    --border-subtle: var(--border-color, #e8eaed);
+    --border-hover: var(--border-hover, #d0d3d6);
+    --text-primary: var(--text-main, #1a1d29);
+    --text-secondary: var(--text-light, #6b7280);
+    --text-muted: var(--text-muted, #9ca3af);
+    --accent: var(--primary, #6366f1);
+    --accent-light: var(--primary-light, #eef2ff);
+    --accent-dark: var(--primary-dark, #4f46e5);
+    --success: var(--success, #10b981);
+    --success-light: var(--success-light, #d1fae5);
   }
 
   .project-page-container {
@@ -170,10 +202,11 @@ const instagramLink = CONTACT.instagram;
 
   /* Enhanced Header Section */
   .project-header {
-    padding: 40px 0;
-    margin-bottom: 40px;
-    background: linear-gradient(to bottom, var(--card-bg) 0%, transparent 100%);
+    padding: 48px 0 40px;
+    margin-bottom: 48px;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.03) 0%, rgba(255, 255, 255, 0) 100%);
     position: relative;
+    border-radius: 0 0 24px 24px;
   }
 
   .project-header::after {
@@ -375,55 +408,120 @@ const instagramLink = CONTACT.instagram;
   .prose-wrapper {
     margin-bottom: 56px;
     background: var(--card-bg);
-    padding: 32px;
+    padding: 40px;
     border-radius: 16px;
     box-shadow: var(--shadow-md);
     border: 1px solid var(--border-subtle);
   }
 
-  /* Enhanced Prose Styles */
+  @media (max-width: 640px) {
+    .prose-wrapper {
+      padding: 28px 24px;
+    }
+  }
+
+  /* Enhanced Prose Styles - Premium Typography */
   :global(.markdown p) {
     font-size: 1.125rem;
-    line-height: 1.8;
-    color: #374151;
+    line-height: 1.9;
+    color: #4b5563;
     margin-bottom: 1.75em;
+    font-weight: 400;
+    letter-spacing: -0.01em;
   }
   
   :global(.markdown h2) {
-    font-size: 1.75rem;
+    font-size: 1.875rem;
     font-weight: 700;
     margin: 2.5em 0 1.25em;
     color: var(--text-primary);
-    letter-spacing: -0.02em;
-    padding-bottom: 12px;
+    letter-spacing: -0.025em;
+    padding-bottom: 16px;
     border-bottom: 2px solid var(--accent-light);
+    line-height: 1.3;
   }
 
   :global(.markdown h3) {
-    font-size: 1.4rem;
+    font-size: 1.5rem;
     font-weight: 600;
     margin: 2em 0 1em;
+    color: var(--text-primary);
+    letter-spacing: -0.02em;
+    line-height: 1.4;
+  }
+
+  :global(.markdown h4) {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 1.5em 0 0.75em;
     color: var(--text-primary);
   }
 
   :global(.markdown ul), :global(.markdown ol) {
-    padding-left: 24px;
+    padding-left: 28px;
     margin-bottom: 1.75em;
   }
   
   :global(.markdown li) {
-    margin-bottom: 0.75em;
+    margin-bottom: 0.875em;
     padding-left: 8px;
-    line-height: 1.7;
+    line-height: 1.8;
+    color: #4b5563;
+  }
+
+  :global(.markdown li::marker) {
+    color: var(--accent);
   }
 
   :global(.markdown code) {
     background: var(--accent-light);
     color: var(--accent-dark);
-    padding: 2px 6px;
-    border-radius: 4px;
+    padding: 3px 8px;
+    border-radius: 6px;
     font-size: 0.9em;
-    font-family: 'SF Mono', 'Monaco', 'Cascadia Code', monospace;
+    font-family: 'SF Mono', 'Monaco', 'Cascadia Code', 'Consolas', monospace;
+    font-weight: 500;
+    border: 1px solid rgba(99, 102, 241, 0.1);
+  }
+
+  :global(.markdown pre) {
+    background: #1a1d29;
+    color: #e5e7eb;
+    padding: 20px;
+    border-radius: 12px;
+    overflow-x: auto;
+    margin: 1.75em 0;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  :global(.markdown pre code) {
+    background: transparent;
+    color: inherit;
+    padding: 0;
+    border: none;
+    font-size: 0.875rem;
+  }
+
+  :global(.markdown blockquote) {
+    border-left: 4px solid var(--accent);
+    padding-left: 20px;
+    margin: 1.75em 0;
+    color: var(--text-secondary);
+    font-style: italic;
+    background: var(--accent-light);
+    padding: 16px 20px;
+    border-radius: 8px;
+  }
+
+  :global(.markdown a) {
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color 0.2s ease;
+  }
+
+  :global(.markdown a:hover) {
+    color: var(--accent-dark);
   }
 
   .architecture-wrapper {
@@ -551,6 +649,9 @@ const instagramLink = CONTACT.instagram;
     height: 20px;
     object-fit: contain;
     display: block;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.1));
   }
 
   .instagram.btn-secondary:hover {
@@ -559,26 +660,47 @@ const instagramLink = CONTACT.instagram;
     color: #E4405F;
   }
 
-  .secure-text {
-    font-size: 12px;
-    text-align: center;
-    color: var(--text-muted);
-    margin-top: 16px;
-    line-height: 1.6;
-    padding: 12px;
-    background: var(--accent-light);
-    border-radius: 8px;
+  .includes-section {
+    margin-top: 20px;
+    padding: 20px;
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    border-radius: 12px;
+    border: 1px solid var(--border-subtle);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .includes-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 0;
+  }
+
+  .includes-icon {
+    font-size: 20px;
+    width: 32px;
+    height: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 6px;
+    background: var(--card-bg);
+    border-radius: 8px;
+    box-shadow: var(--shadow-sm);
+    flex-shrink: 0;
   }
 
-  .secure-text::before {
-    content: '✓';
-    color: var(--success);
-    font-weight: bold;
+  .includes-label {
     font-size: 14px;
+    font-weight: 500;
+    color: var(--text-primary);
+    letter-spacing: -0.01em;
+  }
+
+  .includes-item:not(:last-child) {
+    border-bottom: 1px solid var(--border-subtle);
+    padding-bottom: 12px;
   }
 
   .card-title {

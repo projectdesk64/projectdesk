@@ -3,7 +3,16 @@ import TopHeader from "../components/TopHeader.astro";
 
 import Footer from "../components/Footer.astro";
 
-const { title = "ProjectDesk", activePage } = Astro.props;
+const { 
+  title = "ProjectDesk", 
+  activePage,
+  description = "High-quality software projects and source code for students and professionals.",
+  image = "/logo.png"
+} = Astro.props;
+
+const siteURL = Astro.site || Astro.url.origin;
+const canonicalURL = new URL(Astro.url.pathname, siteURL);
+const imageURL = image.startsWith('http') ? image : new URL(image, siteURL).toString();
 ---
 
 <!DOCTYPE html>
@@ -11,7 +20,29 @@ const { title = "ProjectDesk", activePage } = Astro.props;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={imageURL} />
+    <meta property="og:url" content={canonicalURL.toString()} />
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={imageURL} />
+    
     <title>{title}</title>
+    <link rel="canonical" href={canonicalURL.toString()} />
+    
+    <!-- Google Fonts - Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    
     <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png">
