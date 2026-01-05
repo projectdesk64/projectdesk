@@ -51,8 +51,12 @@ const projectImage = project.data.coverImage;
         
         <div class="title-row">
           <h1 class="fade-in-up" style="animation-delay: 0.2s">{project.data.title}</h1>
-          <div class="price-tag fade-in-up" style="animation-delay: 0.3s">
-            <span class="currency">₹</span>{project.data.price}
+          <div class="price-display fade-in-up" style="animation-delay: 0.3s">
+            <span class="price-label">Price</span>
+            <div class="price-value">
+              <span class="currency-symbol">₹</span>
+              <span class="price-amount">{project.data.price}</span>
+            </div>
           </div>
         </div>
 
@@ -179,8 +183,8 @@ const projectImage = project.data.coverImage;
 
   /* Modern Color System - Using Global Variables */
   :root {
-    --page-bg: var(--bg-light, #fafbfc);
-    --card-bg: var(--white, #ffffff);
+    --page-bg: #ffffff;
+    --card-bg: #ffffff;
     --border-subtle: var(--border-color, #e8eaed);
     --border-hover: var(--border-hover, #d0d3d6);
     --text-primary: var(--text-main, #1a1d29);
@@ -191,22 +195,23 @@ const projectImage = project.data.coverImage;
     --accent-dark: var(--primary-dark, #4f46e5);
     --success: var(--success, #10b981);
     --success-light: var(--success-light, #d1fae5);
+    --price-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
   }
 
   .project-page-container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 24px 100px;
-    background: var(--page-bg);
+    background: linear-gradient(to bottom, #fafbfc 0%, #ffffff 200px);
   }
 
   /* Enhanced Header Section */
   .project-header {
     padding: 48px 0 40px;
     margin-bottom: 48px;
-    background: linear-gradient(135deg, rgba(99, 102, 241, 0.03) 0%, rgba(255, 255, 255, 0) 100%);
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.02) 0%, rgba(255, 255, 255, 0) 100%);
     position: relative;
-    border-radius: 0 0 24px 24px;
+    border-radius: 0;
   }
 
   .project-header::after {
@@ -253,8 +258,8 @@ const projectImage = project.data.coverImage;
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    gap: 24px;
-    margin-bottom: 20px;
+    gap: 32px;
+    margin-bottom: 24px;
     flex-wrap: wrap;
   }
 
@@ -269,32 +274,110 @@ const projectImage = project.data.coverImage;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    flex: 1;
+    min-width: 0;
   }
 
-  .price-tag {
-    font-size: 1.75rem;
-    font-weight: 700;
-    white-space: nowrap;
-    background: var(--gradient-success);
-    color: white;
-    padding: 10px 20px;
-    border-radius: 12px;
-    box-shadow: var(--shadow-md);
+  .price-display {
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    align-items: flex-end;
     gap: 4px;
-    transition: all 0.3s ease;
+    padding-left: 24px;
+    border-left: 2px solid rgba(99, 102, 241, 0.15);
+    flex-shrink: 0;
   }
 
-  .price-tag:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-lg);
+  .price-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-secondary);
+    white-space: nowrap;
   }
 
-  .currency { 
-    font-size: 0.75em; 
+  .price-value {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+    line-height: 1;
+  }
+
+  .currency-symbol {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--accent);
     opacity: 0.9;
-    font-weight: 500;
+  }
+
+  .price-amount {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--accent);
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  @media (max-width: 968px) {
+    .title-row {
+      gap: 20px;
+    }
+    
+    h1 {
+      font-size: 2.25rem;
+    }
+
+    .price-display {
+      padding-left: 20px;
+      gap: 6px;
+    }
+
+    .price-value {
+      gap: 2px;
+    }
+
+    .currency-symbol {
+      font-size: 1.25rem;
+    }
+
+    .price-amount {
+      font-size: 2rem;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .title-row {
+      flex-direction: column;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .price-display {
+      padding-left: 0;
+      padding-top: 12px;
+      border-left: none;
+      border-top: 2px solid rgba(99, 102, 241, 0.15);
+      align-items: flex-start;
+      width: 100%;
+    }
+  }
+
+  @media (max-width: 640px) {
+    h1 {
+      font-size: 1.875rem;
+    }
+
+    .price-amount {
+      font-size: 1.75rem;
+    }
+
+    .currency-symbol {
+      font-size: 1.125rem;
+    }
   }
 
   .meta-row {
@@ -410,8 +493,8 @@ const projectImage = project.data.coverImage;
     background: var(--card-bg);
     padding: 40px;
     border-radius: 16px;
-    box-shadow: var(--shadow-md);
-    border: 1px solid var(--border-subtle);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.05);
   }
 
   @media (max-width: 640px) {
@@ -529,8 +612,8 @@ const projectImage = project.data.coverImage;
     background: var(--card-bg);
     padding: 32px;
     border-radius: 16px;
-    box-shadow: var(--shadow-md);
-    border: 1px solid var(--border-subtle);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.05);
   }
 
   .img-frame {
@@ -563,11 +646,11 @@ const projectImage = project.data.coverImage;
   }
 
   .action-card, .spec-card {
-    border: 1px solid var(--border-subtle);
+    border: 1px solid rgba(0, 0, 0, 0.06);
     border-radius: 16px;
     padding: 28px;
     background: var(--card-bg);
-    box-shadow: var(--shadow-md);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.06);
     transition: all 0.3s ease;
   }
 
@@ -762,10 +845,6 @@ const projectImage = project.data.coverImage;
       font-size: 1.875rem;
     }
 
-    .price-tag {
-      font-size: 1.5rem;
-      padding: 8px 16px;
-    }
 
     .prose-wrapper, .architecture-wrapper {
       padding: 24px;
