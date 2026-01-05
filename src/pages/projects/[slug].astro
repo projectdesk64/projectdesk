@@ -26,177 +26,631 @@ const whatsappLink = CONTACT.whatsappNumber
   : null;
 
 const emailLink = `mailto:${CONTACT.email}?subject=Project Inquiry&body=${message}`;
+const instagramLink = CONTACT.instagram;
 ---
 
 <BaseLayout title={project.data.title}>
-  <article class="project">
-    <header>
-      <div class="badges">
-        <span class="category-badge">{project.data.category}</span>
-      </div>
-      <h1>{project.data.title}</h1>
-      <p class="price">₹{project.data.price}</p>
-      
-      <div class="tech-stack">
-        {project.data.techStack.map((tech) => (
-          <span class="tech-badge">{tech}</span>
-        ))}
+  <div class="project-page-container">
+    
+    <!-- Header Section -->
+    <header class="project-header">
+      <div class="header-content">
+        <nav class="breadcrumb">
+          <a href="/projects">Projects</a>
+          <span class="chevron">/</span>
+          <span class="current">{project.data.title}</span>
+        </nav>
+        
+        <div class="title-row">
+          <h1>{project.data.title}</h1>
+          <div class="price-tag">
+            <span class="currency">₹</span>{project.data.price}
+          </div>
+        </div>
+
+        <div class="meta-row">
+          <div class="category-chip">{project.data.category}</div>
+          <span class="divider">|</span>
+          <span class="id-text">ID: {project.slug.toUpperCase()}</span>
+        </div>
       </div>
     </header>
 
-    <img
-      src={project.data.coverImage}
-      alt={project.data.title}
-      class="cover"
-    />
+    <!-- Main Grid -->
+    <main class="main-grid">
+      
+      <!-- Left: Content & Visuals -->
+      <div class="content-area">
+        <div class="hero-image-container">
+          <img
+            src={project.data.coverImage}
+            alt={project.data.title}
+            class="hero-image"
+            transition:name={`project-image-${project.slug}`}
+          />
+        </div>
 
-    <div class="markdown">
-      <Content />
-    </div>
+        <div class="prose-wrapper">
+          <div class="section-label">Overview</div>
+          <Content />
+        </div>
 
-    <section class="architecture">
-      <h2>Architecture</h2>
-      <img
-        src={project.data.architectureImage}
-        alt="Architecture diagram"
-      />
-    </section>
-
-    <section class="cta">
-      <h2>Interested in this project?</h2>
-      <p>Contact me to get the source code, documentation, and customization.</p>
-
-      <div class="cta-buttons">
-        {whatsappLink && (
-          <a href={whatsappLink} target="_blank" class="btn whatsapp">
-            <img src="/icons/whatsapp.png" alt="WhatsApp" width="24" height="24" />
-            WhatsApp
-          </a>
-        )}
-
-        <a href={emailLink} class="btn email">
-          <img src="/icons/email.png" alt="Email" width="24" height="24" />
-          Email Me
-        </a>
-
-        {CONTACT.instagram && (
-          <a href={CONTACT.instagram} target="_blank" class="btn instagram">
-            <img src="/icons/instagram.png" alt="Instagram" width="24" height="24" />
-            Instagram
-          </a>
+        {project.data.architectureImage && (
+          <div class="architecture-wrapper">
+             <div class="section-label">System Architecture</div>
+             <div class="img-frame">
+                <img
+                  src={project.data.architectureImage}
+                  alt="Architecture diagram"
+                />
+             </div>
+          </div>
         )}
       </div>
-    </section>
-  </article>
+
+      <!-- Right: Specifications & Actions -->
+      <aside class="sidebar-area">
+        <div class="sidebar-sticky">
+          
+          <!-- Actions -->
+          <div class="action-card">
+            <div class="action-header">
+              <span class="label">Purchase & Support</span>
+            </div>
+            
+            <div class="button-group">
+              {whatsappLink && (
+                <a href={whatsappLink} target="_blank" class="btn-primary whatsapp">
+                  <span>Buy via WhatsApp</span>
+                  <img src="/icons/whatsapp.png" alt="WhatsApp" width="20" height="20" />
+                </a>
+              )}
+              
+              <a href={emailLink} class="btn-secondary email">
+                <span>Contact Email</span>
+                <img src="/icons/email.png" alt="Email" width="20" height="20" />
+              </a>
+
+              {instagramLink && (
+                <a href={instagramLink} target="_blank" class="btn-secondary instagram">
+                  <span>Follow on Instagram</span>
+                  <img src="/icons/instagram.png" alt="Instagram" width="20" height="20" />
+                </a>
+              )}
+            </div>
+            <p class="secure-text">Includes Source Code • Documentation • Setup</p>
+          </div>
+
+          <!-- Tech Stack -->
+          <div class="spec-card">
+            <div class="card-title">Technology Stack</div>
+            <div class="tech-grid">
+              {project.data.techStack.map((tech) => (
+                <div class="tech-pill">{tech}</div>
+              ))}
+            </div>
+          </div>
+
+        </div>
+      </aside>
+
+    </main>
+  </div>
 </BaseLayout>
 
 <style>
-  .project {
-    max-width: 900px;
+  /* Modern Color System */
+  :root {
+    --page-bg: #fafbfc;
+    --card-bg: #ffffff;
+    --border-subtle: #e8eaed;
+    --border-hover: #d0d3d6;
+    --text-primary: #1a1d29;
+    --text-secondary: #6b7280;
+    --text-muted: #9ca3af;
+    --accent: #6366f1;
+    --accent-light: #eef2ff;
+    --accent-dark: #4f46e5;
+    --success: #10b981;
+    --success-light: #d1fae5;
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --gradient-success: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  }
+
+  .project-page-container {
+    max-width: 1200px;
     margin: 0 auto;
+    padding: 0 24px 100px;
+    background: var(--page-bg);
   }
 
-  header {
-    margin-bottom: 24px;
+  /* Enhanced Header Section */
+  .project-header {
+    padding: 40px 0;
+    margin-bottom: 40px;
+    background: linear-gradient(to bottom, var(--card-bg) 0%, transparent 100%);
+    position: relative;
   }
 
-  .badges {
-    margin-bottom: 12px;
+  .project-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--border-subtle), transparent);
   }
 
-  .category-badge {
-    background: #e0f2fe;
-    color: #0369a1;
-    padding: 6px 12px;
+  .breadcrumb {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 500;
+  }
+
+  .breadcrumb a { 
+    text-decoration: none; 
+    color: inherit; 
+    transition: all 0.2s ease;
+    padding: 4px 8px;
+    border-radius: 4px;
+  }
+  .breadcrumb a:hover { 
+    color: var(--accent);
+    background: var(--accent-light);
+  }
+  .breadcrumb .chevron { 
+    opacity: 0.4;
+    font-weight: 300;
+  }
+  .breadcrumb .current { 
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+
+  .title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 24px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+
+  h1 {
+    font-size: 2.75rem;
+    line-height: 1.2;
+    font-weight: 800;
+    margin: 0;
+    color: var(--text-primary);
+    letter-spacing: -0.03em;
+    background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .price-tag {
+    font-size: 1.75rem;
+    font-weight: 700;
+    white-space: nowrap;
+    background: var(--gradient-success);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 12px;
+    box-shadow: var(--shadow-md);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    transition: all 0.3s ease;
+  }
+
+  .price-tag:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .currency { 
+    font-size: 0.75em; 
+    opacity: 0.9;
+    font-weight: 500;
+  }
+
+  .meta-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 14px;
+    color: var(--text-secondary);
+    flex-wrap: wrap;
+  }
+
+  .category-chip {
+    background: linear-gradient(135deg, var(--accent-light) 0%, #e0e7ff 100%);
+    color: var(--accent-dark);
+    padding: 6px 14px;
     border-radius: 20px;
-    font-size: 0.85rem;
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    font-size: 11px;
+    letter-spacing: 0.8px;
+    border: none;
+    box-shadow: var(--shadow-sm);
   }
 
-  .tech-stack {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 16px;
+  .divider { 
+    color: var(--border-subtle);
+    font-weight: 300;
   }
-
-  .tech-badge {
-    background: #f3f4f6;
-    color: #374151;
+  .id-text { 
+    font-family: 'SF Mono', 'Monaco', 'Cascadia Code', monospace;
+    background: var(--page-bg);
     padding: 4px 10px;
     border-radius: 6px;
-    font-size: 0.9rem;
-    border: 1px solid #e5e5e5;
+    font-size: 12px;
+    color: var(--text-secondary);
+    border: 1px solid var(--border-subtle);
   }
 
-  .price {
-    font-size: 1.3rem;
-    font-weight: 600;
-    margin-top: 8px;
+  /* Main Grid Layout */
+  .main-grid {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 48px;
+    align-items: start;
   }
 
-  .cover {
-    width: 100%;
+  @media (max-width: 968px) {
+    .main-grid { 
+      grid-template-columns: 1fr; 
+      gap: 40px; 
+    }
+    h1 {
+      font-size: 2.25rem;
+    }
+  }
+
+  /* Left Content Area */
+  .content-area {
+    min-width: 0;
+  }
+
+  .hero-image-container {
+    margin-bottom: 48px;
     border-radius: 16px;
-    margin: 32px 0;
+    overflow: hidden;
+    background: var(--card-bg);
+    box-shadow: var(--shadow-xl);
+    border: 1px solid var(--border-subtle);
+    transition: all 0.3s ease;
   }
 
-  .architecture {
-    margin-top: 48px;
+  .hero-image-container:hover {
+    box-shadow: var(--shadow-xl);
+    transform: translateY(-2px);
   }
 
-  .architecture img {
+  .hero-image {
     width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.5s ease;
+  }
+
+  .hero-image-container:hover .hero-image {
+    transform: scale(1.02);
+  }
+
+  .section-label {
+    font-size: 12px;
+    text-transform: uppercase;
+    color: var(--accent);
+    letter-spacing: 1.2px;
+    font-weight: 700;
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--accent-light);
+    display: inline-block;
+    position: relative;
+  }
+
+  .section-label::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 60px;
+    height: 2px;
+    background: var(--accent);
+  }
+
+  .prose-wrapper {
+    margin-bottom: 56px;
+    background: var(--card-bg);
+    padding: 32px;
+    border-radius: 16px;
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border-subtle);
+  }
+
+  /* Enhanced Prose Styles */
+  :global(.markdown p) {
+    font-size: 1.125rem;
+    line-height: 1.8;
+    color: #374151;
+    margin-bottom: 1.75em;
+  }
+  
+  :global(.markdown h2) {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin: 2.5em 0 1.25em;
+    color: var(--text-primary);
+    letter-spacing: -0.02em;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--accent-light);
+  }
+
+  :global(.markdown h3) {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin: 2em 0 1em;
+    color: var(--text-primary);
+  }
+
+  :global(.markdown ul), :global(.markdown ol) {
+    padding-left: 24px;
+    margin-bottom: 1.75em;
+  }
+  
+  :global(.markdown li) {
+    margin-bottom: 0.75em;
+    padding-left: 8px;
+    line-height: 1.7;
+  }
+
+  :global(.markdown code) {
+    background: var(--accent-light);
+    color: var(--accent-dark);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.9em;
+    font-family: 'SF Mono', 'Monaco', 'Cascadia Code', monospace;
+  }
+
+  .architecture-wrapper {
+    margin-top: 48px;
+    background: var(--card-bg);
+    padding: 32px;
+    border-radius: 16px;
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border-subtle);
+  }
+
+  .img-frame {
+    border: none;
+    padding: 8px;
     border-radius: 12px;
-    margin-top: 16px;
+    background: var(--page-bg);
+    overflow: hidden;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+  }
+  
+  .img-frame img {
+    display: block;
+    width: 100%;
+    border-radius: 8px;
+    transition: transform 0.3s ease;
   }
 
-  .cta {
-    margin-top: 72px;
-    padding: 40px 32px;
-    border-radius: 20px;
-    background: linear-gradient(180deg, #f9f9f9, #f2f2f2);
-    text-align: center;
+  .img-frame:hover img {
+    transform: scale(1.01);
   }
 
-  .cta h2 {
-    margin-bottom: 12px;
-    font-size: 1.5rem;
-  }
-
-  .cta p {
-    color: #555;
-    margin-bottom: 28px;
-  }
-
-  .cta-buttons {
+  /* Enhanced Sidebar */
+  .sidebar-sticky {
+    position: sticky;
+    top: 100px;
     display: flex;
-    gap: 16px;
-    justify-content: center;
-    flex-wrap: wrap;
+    flex-direction: column;
+    gap: 24px;
   }
 
-  .btn {
+  .action-card, .spec-card {
+    border: 1px solid var(--border-subtle);
+    border-radius: 16px;
+    padding: 28px;
+    background: var(--card-bg);
+    box-shadow: var(--shadow-md);
+    transition: all 0.3s ease;
+  }
+
+  .action-card:hover, .spec-card:hover {
+    box-shadow: var(--shadow-lg);
+    border-color: var(--border-hover);
+  }
+
+  .action-header { 
+    margin-bottom: 20px; 
+    text-align: center; 
+  }
+  .label { 
+    font-size: 13px; 
+    font-weight: 700; 
+    color: var(--accent); 
+    text-transform: uppercase; 
+    letter-spacing: 1px;
+    display: inline-block;
+    padding: 6px 12px;
+    background: var(--accent-light);
+    border-radius: 8px;
+  }
+
+  .button-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .btn-primary, .btn-secondary {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 12px;
-    min-width: 160px;
-    padding: 12px 24px;
-    border-radius: 12px;
+    gap: 10px;
+    padding: 14px 20px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 15px;
     text-decoration: none;
-    font-weight: 500;
-    transition: transform 0.1s ease, box-shadow 0.1s ease;
-    border: 1px solid #e5e5e5;
-    background: #fff;
-    color: #111;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    box-shadow: var(--shadow-md);
   }
 
-  .btn:hover {
+  .btn-primary {
+    background: var(--gradient-primary);
+    color: #fff;
+  }
+  .btn-primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    background: #fcfcfc;
+    box-shadow: var(--shadow-lg);
+  }
+  
+  .whatsapp.btn-primary {
+    background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+  }
+  .whatsapp.btn-primary:hover { 
+    background: linear-gradient(135deg, #128C7E 0%, #075E54 100%);
+  }
+
+  .btn-secondary {
+    background: var(--card-bg);
+    color: var(--text-primary);
+    border: 2px solid var(--border-subtle);
+    box-shadow: var(--shadow-sm);
+  }
+  .btn-secondary:hover {
+    border-color: var(--accent);
+    background: var(--accent-light);
+    color: var(--accent-dark);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .btn-primary img, .btn-secondary img {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+    display: block;
+  }
+
+  .instagram.btn-secondary:hover {
+    border-color: #E4405F;
+    background: linear-gradient(135deg, #fff 0%, #ffeef1 100%);
+    color: #E4405F;
+  }
+
+  .secure-text {
+    font-size: 12px;
+    text-align: center;
+    color: var(--text-muted);
+    margin-top: 16px;
+    line-height: 1.6;
+    padding: 12px;
+    background: var(--accent-light);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .secure-text::before {
+    content: '✓';
+    color: var(--success);
+    font-weight: bold;
+    font-size: 14px;
+  }
+
+  .card-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--accent-light);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .card-title::before {
+    content: '⚡';
+    font-size: 18px;
+  }
+
+  .tech-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .tech-pill {
+    font-size: 13px;
+    padding: 8px 16px;
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    color: var(--text-primary);
+    border-radius: 20px;
+    border: 1px solid var(--border-subtle);
+    font-weight: 500;
+    transition: all 0.2s ease;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .tech-pill:hover {
+    background: var(--accent-light);
+    color: var(--accent-dark);
+    border-color: var(--accent);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 640px) {
+    .project-page-container {
+      padding: 0 16px 60px;
+    }
+
+    .project-header {
+      padding: 24px 0;
+    }
+
+    h1 {
+      font-size: 1.875rem;
+    }
+
+    .price-tag {
+      font-size: 1.5rem;
+      padding: 8px 16px;
+    }
+
+    .prose-wrapper, .architecture-wrapper {
+      padding: 24px;
+    }
+
+    .action-card, .spec-card {
+      padding: 20px;
+    }
   }
 </style>
